@@ -1,0 +1,98 @@
+<?php
+namespace MED\Kassa\Decorator;
+
+use MED\Kassa\Model\Beleg;
+
+/**
+ * Class BelegDecorator
+ * @package MED\Kassa\Model
+ */
+class BelegDecorator
+{
+    const TRAININGS_BELEG = 0;
+    const STORNO_BELEG = 1;
+    const NORMAL_BELEG = 2;
+    const NULL_BELEG = 3;
+
+    /**
+     * set für validation
+     * @var array
+     */
+    private static $VALID_BELEG_SET = [
+        self::TRAININGS_BELEG,
+        self::NULL_BELEG,
+        self::NORMAL_BELEG,
+        self::STORNO_BELEG
+    ];
+
+    private $typ;
+
+    /**
+     * @var Beleg
+     */
+    private $beleg;
+
+    /**
+     * defines if the Beleg inside will be encrypted / changed in the service
+     * @var bool
+     */
+    private $prepared = false;
+
+    /**
+     * BelegTyp constructor.
+     * @param Beleg $beleg
+     * @param int $type
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(Beleg $beleg, $type = self::NORMAL_BELEG)
+    {
+        $this->beleg = $beleg;
+        $this->setTyp($type);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTyp()
+    {
+        return $this->typ;
+    }
+
+    /**
+     * @param string $typ
+     * @throws \InvalidArgumentException
+     */
+    final public function setTyp($typ)
+    {
+        if (!in_array($typ, self::$VALID_BELEG_SET, true)) {
+            throw new \InvalidArgumentException(__METHOD__ . ' type has to be valid please check the constants in the class');
+        }
+
+        $this->typ = $typ;
+    }
+
+    /**
+     * @return Beleg
+     */
+    public function getBeleg()
+    {
+        return $this->beleg;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrepared()
+    {
+        return (bool) $this->prepared;
+    }
+
+    /**
+     * this can only be triggered once -> once it's prepared this
+     * state should not changed back
+     */
+    final public function setToPrepared()
+    {
+        $this->prepared = true;
+    }
+}
