@@ -1,6 +1,7 @@
 <?php
 use MED\Kassa\Model\Beleg;
 use MED\Kassa\Decorator\BelegDecorator;
+use MED\Kassa\Model\Signature;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,7 +17,7 @@ class BelegDecoratorTest extends TestCase
      */
     public function wrongTypeInConstructor()
     {
-        $beleg = new BelegDecorator(new Beleg(), 12);
+        $beleg = new BelegDecorator(new Beleg(), new Signature(Signature::A_TRUST_POS), 12);
     }
 
     /**
@@ -25,7 +26,7 @@ class BelegDecoratorTest extends TestCase
      * @expectedExceptionMessage MED\Kassa\Decorator\BelegDecorator::setTyp type has to be valid please check the constants in the class
      */
     public function changeToWrongType() {
-        $beleg = new BelegDecorator(new Beleg(), BelegDecorator::NORMAL_BELEG);
+        $beleg = new BelegDecorator(new Beleg(), new Signature(Signature::A_TRUST_POS) , BelegDecorator::NORMAL_BELEG);
         $beleg->setTyp(12);
     }
 
@@ -33,8 +34,12 @@ class BelegDecoratorTest extends TestCase
      * @test
      */
     public function setPrepared() {
-        $beleg = new BelegDecorator(new Beleg(), BelegDecorator::NORMAL_BELEG);
+        $beleg = new BelegDecorator(new Beleg(), new Signature(Signature::A_TRUST_POS), BelegDecorator::NORMAL_BELEG);
         $beleg->setToPrepared();
         self::assertTrue($beleg->isPrepared());
+    }
+
+    public function getJWS() {
+
     }
 }

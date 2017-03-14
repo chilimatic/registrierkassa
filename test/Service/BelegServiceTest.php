@@ -1,16 +1,13 @@
 <?php
 use MED\Kassa\Decorator\BelegDecorator;
 use MED\Kassa\Model\Beleg;
+use MED\Kassa\Model\Signature;
 use MED\Kassa\Service\BelegService;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Created by PhpStorm.
- * User: j
- * Date: 13.03.17
- * Time: 17:25
+ * Class BelegServiceTest
  */
-
 class BelegServiceTest extends TestCase {
 
     /**
@@ -40,11 +37,11 @@ class BelegServiceTest extends TestCase {
     /**
      * @test
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage MED\Kassa\Service\BelegService::createBeleg $data should not be empty
+     * @expectedExceptionMessage MED\Kassa\Service\BelegService::createNewBeleg $data should not be empty
      */
     public function emptyDataCreateBeleg() {
         $service = new BelegService();
-        $service->createBeleg([]);
+        $service->createNewBeleg([]);
     }
 
     /**
@@ -52,7 +49,7 @@ class BelegServiceTest extends TestCase {
      */
     public function wrongDataCreateBeleg() {
         $service = new BelegService();
-        $beleg = $service->createBeleg(['randomdata']);
+        $beleg = $service->createNewBeleg(['randomdata']);
 
         self::assertEquals($beleg->getBelegNummer(), '');
     }
@@ -65,7 +62,7 @@ class BelegServiceTest extends TestCase {
      */
     public function validDataCreateBeleg($data, $expectedKassenId) {
         $service = new BelegService();
-        $beleg = $service->createBeleg($data);
+        $beleg = $service->createNewBeleg($data);
 
         self::assertEquals($beleg->getKassenId(), $expectedKassenId);
     }
@@ -78,7 +75,8 @@ class BelegServiceTest extends TestCase {
     public function decorateBeleg($data) {
         $service = new BelegService();
         $beleg = $service->decorateBeleg(
-            $service->createBeleg($data),
+            $service->createNewBeleg($data),
+            new Signature(Signature::A_TRUST_POS),
             BelegDecorator::NORMAL_BELEG
         );
 

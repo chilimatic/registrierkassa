@@ -3,6 +3,7 @@ namespace MED\Kassa\Service;
 
 use MED\Kassa\Decorator\BelegDecorator;
 use MED\Kassa\Model\Beleg;
+use MED\Kassa\Model\Signature;
 
 class BelegService {
 
@@ -12,7 +13,7 @@ class BelegService {
      * @return Beleg
      * @throws \InvalidArgumentException
      */
-    public function createBeleg(array $data)
+    public function createNewBeleg(array $data)
     {
         if (!$data) {
             throw new \InvalidArgumentException(__METHOD__ . ' $data should not be empty');
@@ -25,17 +26,19 @@ class BelegService {
                 $beleg->{$methodName}($value);
             }
         }
-
         return $beleg;
     }
 
     /**
      * @param Beleg $beleg
+     * @param Signature $signature
      * @param string $type
      * @return BelegDecorator
+     *
      * @throws \InvalidArgumentException
      */
-    public function decorateBeleg(Beleg $beleg, $type) {
-        return new BelegDecorator($beleg, $type);
+    public function decorateBeleg(Beleg $beleg, Signature $signature, $type)
+    {
+        return new BelegDecorator($beleg, $signature, $type);
     }
 }

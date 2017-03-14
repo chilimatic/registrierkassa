@@ -2,6 +2,7 @@
 namespace MED\Kassa\Decorator;
 
 use MED\Kassa\Model\Beleg;
+use MED\Kassa\Model\Signature;
 
 /**
  * Class BelegDecorator
@@ -25,6 +26,14 @@ class BelegDecorator
         self::STORNO_BELEG
     ];
 
+    /**
+     * @var Signature
+     */
+    private $signature;
+
+    /**
+     * @var int
+     */
     private $typ;
 
     /**
@@ -41,13 +50,36 @@ class BelegDecorator
     /**
      * BelegTyp constructor.
      * @param Beleg $beleg
+     * @param Signature $signature
      * @param int $type
      * @throws \InvalidArgumentException
      */
-    public function __construct(Beleg $beleg, $type = self::NORMAL_BELEG)
+    final public function __construct(Beleg $beleg, Signature $signature, $type = self::NORMAL_BELEG)
     {
         $this->beleg = $beleg;
+        $this->signature = $signature;
         $this->setTyp($type);
+    }
+
+    /**
+     * @return string
+     */
+    final public function __toString()
+    {
+        try {
+            return  $this->getJWS();
+        } catch (\InvalidArgumentException $e) {
+            return '';
+        }
+    }
+
+    /**
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    final public function getJWS() {
+        $prefix = '_' . $this->signature->getSignaturePrefix() . '_';
+        return  $prefix . $this->getBeleg()->getJWS();
     }
 
     /**
@@ -94,5 +126,12 @@ class BelegDecorator
     final public function setToPrepared()
     {
         $this->prepared = true;
+    }
+
+    /**
+     * @return Signature
+     */
+    final public function getSignature() {
+        return $this->signature;
     }
 }
