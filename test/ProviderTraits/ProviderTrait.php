@@ -56,15 +56,17 @@ trait ProviderTrait
 
 
     /**
+     * reciever($belegData, $signaturePosIndex, $base64Signature)
+     *
      * @return array
      */
-    public function belegDataProvider() {
+    public function belegDataProviderWithSignature() {
         return [
             [
-                [
+                [ // belegdata
                     Beleg::KASSEN_ID => '1',
-                    Beleg::BELEG_NUMMER => '',
-                    Beleg::BELEG_DATUM_UHRZEIT => date('Y-m-d'). 'T' . date('H:i:s'),
+                    Beleg::BELEG_NUMMER => '000001',
+                    Beleg::BELEG_DATUM_UHRZEIT => '2017-03-03'. 'T' . '23:56:22',
                     Beleg::BETRAG_SATZ_NORMAL => 0,
                     Beleg::BETRAG_SATZ_NULL => 0,
                     Beleg::BETRAG_SATZ_ERMAESSIGT_1 => 0,
@@ -74,7 +76,25 @@ trait ProviderTrait
                     Beleg::SIG_VORIGER_BELEG => '1',
                     Beleg::STAND_UMSATZZAEHLER => 0
                 ],
-                '1'
+                1, // signature index
+                'eyJhbGciOiJFUzI1NiJ9X1IxLUFUMV8xXzAwMDAwMV8yMDE3LTAzLTAzVDIzOjU2OjIyXzAsMDBfMCwwMF8wLDAwXzAsMDBfMCwwMF8wXzBfMQ' // base64 signature
+            ],
+            [
+                [ // belegdata
+                    Beleg::KASSEN_ID => '1',
+                    Beleg::BELEG_NUMMER => '000002',
+                    Beleg::BELEG_DATUM_UHRZEIT => '2017-03-05'. 'T' . '07:12:12',
+                    Beleg::BETRAG_SATZ_NORMAL => 10,
+                    Beleg::BETRAG_SATZ_NULL => 0,
+                    Beleg::BETRAG_SATZ_ERMAESSIGT_1 => 0,
+                    Beleg::BETRAG_SATZ_ERMAESSIGT_2 => 0,
+                    Beleg::BETRAG_SATZ_BESONDERS => 0,
+                    Beleg::ZERTIFIKAT_SERIENNUMMER => 0,
+                    Beleg::SIG_VORIGER_BELEG => 'eyJhbGciOiJFUzI1NiJ9X1IxLUFUMV8xX18yMDE3LTAzLTAzVDIzOjU2OjIyXzAsMDBfMCwwMF8wLDAwXzAsMDBfMCwwMF8wXzBfMQ',
+                    Beleg::STAND_UMSATZZAEHLER => 1000
+                ],
+                1, // signature index
+                'eyJhbGciOiJFUzI1NiJ9X1IxLUFUMV8xXzAwMDAwMl8yMDE3LTAzLTA1VDA3OjEyOjEyXzEwLDAwXzAsMDBfMCwwMF8wLDAwXzAsMDBfMTAwMF8wX2V5SmhiR2NpT2lKRlV6STFOaUo5WDFJeExVRlVNVjh4WDE4eU1ERTNMVEF6TFRBelZESXpPalUyT2pJeVh6QXNNREJmTUN3d01GOHdMREF3WHpBc01EQmZNQ3d3TUY4d1h6QmZNUQ' // base64 signature
             ]
         ];
     }

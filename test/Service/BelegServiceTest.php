@@ -30,7 +30,7 @@ class BelegServiceTest extends TestCase
 
     /**
      * @test
-     * @dataProvider belegDataProvider
+     * @dataProvider belegDataProviderWithSignature
      * @param array $data
      * @param string $expectedKassenId
      */
@@ -42,7 +42,7 @@ class BelegServiceTest extends TestCase
 
     /**
      * @test
-     * @dataProvider belegDataProvider
+     * @dataProvider belegDataProviderWithSignature
      * @param array $data
      */
     public function decorateBeleg($data) {
@@ -72,5 +72,21 @@ class BelegServiceTest extends TestCase
             ),
             BelegService::getSignatureAlgorithmJson($signature)
         );
+    }
+
+    /**
+     * @test
+     * @dataProvider belegDataProviderWithSignature
+     * @param array $data
+     */
+    public function getJWSSignature($data, $signaturePosition, $expectedBase64Signature)
+    {
+        $belegDecorator = BelegService::decorateBeleg(
+            BelegService::createNewBeleg($data),
+            new Signature($signaturePosition),
+            BelegDecorator::NORMAL_BELEG
+        );
+
+        self::assertEquals(BelegService::getJWSSignature($belegDecorator), $expectedBase64Signature);
     }
 }
