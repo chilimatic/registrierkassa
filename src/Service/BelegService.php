@@ -48,6 +48,14 @@ class BelegService {
     }
 
     /**
+     * @param Signature $signature
+     * @return string
+     */
+    public function getSignatureAlgorithmJsonAsBase64(Signature $signature) {
+        return base64_encode(json_encode(['alg' => $signature->getJwsSignatureAlgorithm()]));
+    }
+
+    /**
      * @param string $vorherigerBelegAlsJWS
      * @param BelegDecorator $belegDecorator
      * @return string

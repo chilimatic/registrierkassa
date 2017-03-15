@@ -58,4 +58,24 @@ class BelegServiceTest extends TestCase
 
         self::assertFalse($beleg->isPrepared());
     }
+
+
+    /**
+     * @test
+     * @dataProvider signaturePrefixProvider
+     * @param int $pos
+     */
+    public function signatureAlgorithmJson($pos) {
+        $service = new BelegService();
+
+        $signature = new Signature($pos);
+        self::assertEquals(
+            base64_encode(json_encode(
+                [
+                    'alg' => $signature->getJwsSignatureAlgorithm()
+                ]
+            )),
+            $service->getSignatureAlgorithmJsonAsBase64($signature)
+        );
+    }
 }
