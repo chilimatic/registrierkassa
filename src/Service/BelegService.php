@@ -17,7 +17,7 @@ class BelegService {
      * @return Beleg
      * @throws \InvalidArgumentException
      */
-    public function createNewBeleg(array $data)
+    public static function createNewBeleg(array $data)
     {
         if (!$data) {
             throw new \InvalidArgumentException(__METHOD__ . ' $data should not be empty');
@@ -42,7 +42,7 @@ class BelegService {
      *
      * @throws \InvalidArgumentException
      */
-    public function decorateBeleg(Beleg $beleg, Signature $signature, $type)
+    public static function decorateBeleg(Beleg $beleg, Signature $signature, $type)
     {
         return new BelegDecorator($beleg, $signature, $type);
     }
@@ -51,8 +51,20 @@ class BelegService {
      * @param Signature $signature
      * @return string
      */
-    public function getSignatureAlgorithmJsonAsBase64(Signature $signature) {
-        return base64_encode(json_encode(['alg' => $signature->getJwsSignatureAlgorithm()]));
+    public static function getSignatureAlgorithmJson(Signature $signature) {
+        return json_encode(['alg' => $signature->getJwsSignatureAlgorithm()]);
+    }
+
+    /**
+     * @param BelegDecorator $belegDecorator
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    public static function getJWSSignature(BelegDecorator $belegDecorator)
+    {
+        $signatureHeader = self::getSignatureAlgorithmJson($belegDecorator->getSignature());
+        $signaturePayload = $belegDecorator->getJWS();
+        return CryptoService::base64urlEncode($signatureHeader.$signaturePayload);
     }
 
     /**
@@ -61,7 +73,7 @@ class BelegService {
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function generateChainingValue($vorherigerBelegAlsJWS, BelegDecorator $belegDecorator)
+    public static function generateChainingValue($vorherigerBelegAlsJWS, BelegDecorator $belegDecorator)
     {
         if (!$vorherigerBelegAlsJWS) {
             $hashBase = (string) $belegDecorator->getBeleg()->getKassenId();

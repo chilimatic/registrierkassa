@@ -16,16 +16,14 @@ class BelegServiceTest extends TestCase
      * @expectedExceptionMessage MED\Kassa\Service\BelegService::createNewBeleg $data should not be empty
      */
     public function emptyDataCreateBeleg() {
-        $service = new BelegService();
-        $service->createNewBeleg([]);
+        BelegService::createNewBeleg([]);
     }
 
     /**
      * @test
      */
     public function wrongDataCreateBeleg() {
-        $service = new BelegService();
-        $beleg = $service->createNewBeleg(['randomdata']);
+        $beleg = BelegService::createNewBeleg(['randomdata']);
 
         self::assertEquals($beleg->getBelegNummer(), '');
     }
@@ -37,8 +35,7 @@ class BelegServiceTest extends TestCase
      * @param string $expectedKassenId
      */
     public function validDataCreateBeleg($data, $expectedKassenId) {
-        $service = new BelegService();
-        $beleg = $service->createNewBeleg($data);
+        $beleg = BelegService::createNewBeleg($data);
 
         self::assertEquals($beleg->getKassenId(), $expectedKassenId);
     }
@@ -49,9 +46,9 @@ class BelegServiceTest extends TestCase
      * @param array $data
      */
     public function decorateBeleg($data) {
-        $service = new BelegService();
-        $beleg = $service->decorateBeleg(
-            $service->createNewBeleg($data),
+
+        $beleg = BelegService::decorateBeleg(
+            BelegService::createNewBeleg($data),
             new Signature(Signature::A_TRUST_POS),
             BelegDecorator::NORMAL_BELEG
         );
@@ -66,16 +63,14 @@ class BelegServiceTest extends TestCase
      * @param int $pos
      */
     public function signatureAlgorithmJson($pos) {
-        $service = new BelegService();
-
         $signature = new Signature($pos);
         self::assertEquals(
-            base64_encode(json_encode(
+            json_encode(
                 [
                     'alg' => $signature->getJwsSignatureAlgorithm()
                 ]
-            )),
-            $service->getSignatureAlgorithmJsonAsBase64($signature)
+            ),
+            BelegService::getSignatureAlgorithmJson($signature)
         );
     }
 }

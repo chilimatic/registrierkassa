@@ -64,4 +64,46 @@ class CryptoService
 
         return self::createAESKey(--$maxTry);
     }
+
+    /**
+     * @param string $input
+     * @param bool $asUrl
+     * @return string
+     */
+    public static function encodeBase64($input, $asUrl = false) {
+        if ($asUrl) {
+            return self::base64urlEncode($input);
+        } else {
+            return base64_encode($input);
+        }
+    }
+
+    /**
+     * @param string $input
+     * @param bool $asUrl
+     * @return string
+     */
+    public static function decodeBase64($input, $asUrl = false) {
+        if ($asUrl) {
+            return self::base64urlDecode($input);
+        } else {
+            return base64_decode($input);
+        }
+    }
+
+    /**
+     * @param string $data
+     * @return string
+     */
+    public static function base64urlEncode($data) {
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+    }
+
+    /**
+     * @param string $data
+     * @return string
+     */
+    public static function base64urlDecode($data) {
+        return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+    }
 }
