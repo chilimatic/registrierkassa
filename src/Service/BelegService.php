@@ -5,6 +5,10 @@ use MED\Kassa\Decorator\BelegDecorator;
 use MED\Kassa\Model\Beleg;
 use MED\Kassa\Model\Signature;
 
+/**
+ * Class BelegService
+ * @package MED\Kassa\Service
+ */
 class BelegService {
 
     /**
@@ -26,6 +30,7 @@ class BelegService {
                 $beleg->{$methodName}($value);
             }
         }
+
         return $beleg;
     }
 
@@ -40,5 +45,29 @@ class BelegService {
     public function decorateBeleg(Beleg $beleg, Signature $signature, $type)
     {
         return new BelegDecorator($beleg, $signature, $type);
+    }
+
+    /**
+     * @param string $vorherigerBelegAlsJWS
+     * @param BelegDecorator $belegDecorator
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    public function generateChainingValue($vorherigerBelegAlsJWS, BelegDecorator $belegDecorator)
+    {
+        if (!$vorherigerBelegAlsJWS) {
+            $hashBase = (string) $belegDecorator->getBeleg()->getKassenId();
+        } else {
+            $hashBase = (string) $vorherigerBelegAlsJWS;
+        }
+
+        $signature = $belegDecorator->getSignature();
+
+        $phpAlgorithm = strtolower(str_replace('-', '', $signature->getJwsSignatureAlgorithm()));
+
+        return CryptoService::extractBytesFromHashAsBase64(
+            CryptoService::generateHash($hashBase, $phpAlgorithm),
+            $signature->getNumberOfExtractedBytesFromPrevSigHash()
+        );
     }
 }

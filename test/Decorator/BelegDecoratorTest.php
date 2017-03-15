@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
  */
 class BelegDecoratorTest extends TestCase
 {
+    use ProviderTrait;
 
     /**
      * @test
@@ -17,7 +18,7 @@ class BelegDecoratorTest extends TestCase
      */
     public function wrongTypeInConstructor()
     {
-        $beleg = new BelegDecorator(new Beleg(), new Signature(Signature::A_TRUST_POS), 12);
+        new BelegDecorator(new Beleg(), new Signature(Signature::A_TRUST_POS), 12);
     }
 
     /**
@@ -39,7 +40,34 @@ class BelegDecoratorTest extends TestCase
         self::assertTrue($beleg->isPrepared());
     }
 
-    public function getJWS() {
 
+    /**
+     * @test
+     * @dataProvider dataProviderBelegToString
+     * @param $dataSet
+     */
+    public function getJWS($dataSet, $belegJWS, $signatureIndex, $belegPrefix) {
+        $beleg = new Beleg();
+        $beleg
+            ->setKassenId($dataSet[0])
+            ->setBelegNummer($dataSet[1])
+            ->setBelegDatumUhrzeit($dataSet[2])
+            ->setBetragSatzNormal($dataSet[3])
+            ->setBetragSatzErmaessigt1($dataSet[4])
+            ->setBetragSatzErmaessigt2($dataSet[5])
+            ->setBetragSatzNull($dataSet[6])
+            ->setBetragSatzBesonders($dataSet[7])
+            ->setStandUmsatzZaehlerAES256ICM($dataSet[8])
+            ->setZertifikatSerienNummer($dataSet[9])
+            ->setSigVorherigerBeleg($dataSet[10]);
+
+        $decorator = new BelegDecorator(
+            $beleg,
+            new Signature($signatureIndex),
+            BelegDecorator::NORMAL_BELEG
+        );
+
+
+        self::assertEquals($decorator->getJWS(), $belegPrefix . $belegJWS);
     }
 }

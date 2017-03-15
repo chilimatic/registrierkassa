@@ -1,6 +1,5 @@
 <?php
 use MED\Kassa\Decorator\BelegDecorator;
-use MED\Kassa\Model\Beleg;
 use MED\Kassa\Model\Signature;
 use MED\Kassa\Service\BelegService;
 use PHPUnit\Framework\TestCase;
@@ -8,32 +7,9 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class BelegServiceTest
  */
-class BelegServiceTest extends TestCase {
-
-    /**
-     * @return array
-     */
-    public function belegDataProvider() {
-        return [
-            [
-                [
-                    Beleg::KASSEN_ID => '1',
-                    Beleg::BELEG_NUMMER => '',
-                    Beleg::BELEG_DATUM_UHRZEIT => date('Y-m-d'). 'T' . date('H:i:s'),
-                    Beleg::BETRAG_SATZ_NORMAL => 0,
-                    Beleg::BETRAG_SATZ_NULL => 0,
-                    Beleg::BETRAG_SATZ_ERMAESSIGT_1 => 0,
-                    Beleg::BETRAG_SATZ_ERMAESSIGT_2 => 0,
-                    Beleg::BETRAG_SATZ_BESONDERS => 0,
-                    Beleg::ZERTIFIKAT_SERIENNUMMER => 0,
-                    Beleg::SIG_VORIGER_BELEG => '1',
-                    Beleg::STAND_UMSATZZAEHLER => 0
-                ],
-                '1'
-            ]
-        ];
-    }
-
+class BelegServiceTest extends TestCase
+{
+    use ProviderTrait;
     /**
      * @test
      * @expectedException InvalidArgumentException

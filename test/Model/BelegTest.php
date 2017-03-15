@@ -5,64 +5,9 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class BelegTest
  */
-class BelegTest extends TestCase {
-
-    /**
-     * @return array
-     */
-    public function dataProviderToStringSets() {
-        return [
-            [
-                [
-                    'DEMO-CASH-BOX524',
-                    '366585AB',
-                    '2015-12-17T11:23:43',
-                    '0.00',
-                    '0.00',
-                    '0.00',
-                    '0.00',
-                    '0.00',
-                    '5/4fWv5/uhI=',
-                    '245abcde',
-                    'lDUkNhEeJKY='
-                ],
-                'DEMO-CASH-BOX524_366585AB_2015-12-17T11:23:43_0,00_0,00_0,00_0,00_0,00_5/4fWv5/uhI=_245abcde_lDUkNhEeJKY='
-            ],
-            [
-                [
-                    'DEMO-CASH-BOX123',
-                    '366585AC',
-                    '2015-12-17T11:23:43',
-                    '0.00',
-                    '0.00',
-                    '0.00',
-                    '0.00',
-                    '0.00',
-                    '5/4fWv5/uhI=',
-                    '245abcde',
-                    'lDUkNhEeJKY='
-                ],
-                'DEMO-CASH-BOX123_366585AC_2015-12-17T11:23:43_0,00_0,00_0,00_0,00_0,00_5/4fWv5/uhI=_245abcde_lDUkNhEeJKY='
-            ],
-            [
-                [
-                    'DEMO-CASH-BOX678',
-                    '366585AD',
-                    '2015-12-17T11:23:43',
-                    '0.00',
-                    '0.00',
-                    '0.00',
-                    '0.00',
-                    '0.00',
-                    '5/4fWv5/uhI=',
-                    '245abcde',
-                    'lDUkNhEeJKY='
-                ],
-                'DEMO-CASH-BOX678_366585AD_2015-12-17T11:23:43_0,00_0,00_0,00_0,00_0,00_5/4fWv5/uhI=_245abcde_lDUkNhEeJKY='
-            ]
-        ];
-    }
-
+class BelegTest extends TestCase
+{
+    use ProviderTrait;
 
     /**
      * @test
@@ -144,12 +89,12 @@ class BelegTest extends TestCase {
      */
     public function propertyOverloadingGet() {
         $beleg = new Beleg();
-        $magicGet = $beleg->randomProperty;
+        $beleg->randomProperty;
     }
 
     /**
      * @test
-     * @dataProvider dataProviderToStringSets
+     * @dataProvider dataProviderBelegToString
      * @param $dataSet
      * @param $expectedString
      */

@@ -128,7 +128,7 @@ class Beleg
      */
     public function getJWS()
     {
-        return implode('_', [
+        return '_' . implode('_', [
             $this->kassenId,
             $this->belegNummer,
             $this->belegDatumUhrzeit,

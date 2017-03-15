@@ -7,19 +7,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SignatureTest extends TestCase
 {
-    /**
-     * @return array
-     */
-    public function signaturePrefixProvider() {
-        return [
-            [
-                0, 'R1-AT0',
-                1, 'R1-AT1',
-                2, 'R1-AT2',
-                3, 'R1-AT3',
-            ]
-        ];
-    }
+    use ProviderTrait;
 
     /**
      * @test
@@ -27,7 +15,7 @@ class SignatureTest extends TestCase
      * @expectedExceptionMessage MED\Kassa\Model\Signature::__construct the pos variable has to be within 0 and 10
      */
     public function checkConstructionWithWrongType() {
-        $signature = new Signature('test');
+        new Signature('test');
     }
 
     /**
@@ -36,7 +24,7 @@ class SignatureTest extends TestCase
      * @expectedExceptionMessage MED\Kassa\Model\Signature::__construct the pos variable has to be within 0 and 10
      */
     public function checkConstructionWithCorrectTypeOutOfRange() {
-        $signature = new Signature(1000000);
+       new Signature(1000000);
     }
 
     /**
