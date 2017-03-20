@@ -8,13 +8,22 @@ use PHPUnit\Framework\TestCase;
 class CryptoServiceTest extends TestCase
 {
     use ProviderTrait;
+
     /**
      * @test
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage MED\Kassa\Service\CryptoService::createAESKey Max retries have been reached
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage MED\Kassa\Service\CryptoService::createRandomKey: length is invalid
      */
-    public function checkMaxRetries() {
-        CryptoService::createAESKey(0);
+    public function checkInvalidLengthForRandomKey() {
+        CryptoService::createRandomKey(0);
+    }
+
+    /**
+     * @test
+     */
+    public function checkStringLengthRandomKey() {
+        $key = CryptoService::createRandomKey(12);
+        self::assertSame(strlen($key), 12);
     }
 
     /**
@@ -66,5 +75,50 @@ class CryptoServiceTest extends TestCase
      */
     public function checkBitExtractionWithWrongAmountInput() {
         CryptoService::extractBytesFromHashAsBase64('test', 'test');
+    }
+
+    /**
+     * @test
+     */
+    public function checkBase64EncodingNoUrl() {
+        $encodedString = CryptoService::encodeBase64('myString', false);
+        self::assertEquals('bXlTdHJpbmc=', $encodedString);
+    }
+
+    /**
+     * @test
+     */
+    public function checkBase64EncodingUrl() {
+        $encodedString = CryptoService::encodeBase64('myString', true);
+        self::assertEquals('bXlTdHJpbmc', $encodedString);
+    }
+
+    /**
+     * @test
+     */
+    public function checkBase64DecodingNoUrl() {
+        $decodedString = CryptoService::decodeBase64('bXlTdHJpbmc=', false);
+        self::assertEquals('myString', $decodedString);
+    }
+
+    /**
+     * @test
+     */
+    public function checkBase64DecodingUrl() {
+        $decodedString = CryptoService::decodeBase64('bXlTdHJpbmc', true);
+        self::assertEquals('myString', $decodedString);
+    }
+
+    /**
+     * @test
+     */
+    public function checkBase65EnAndDecoding() {
+        $string = 'test';
+        self::assertEquals(
+            $string,
+            CryptoService::decodeBase64(
+                CryptoService::encodeBase64($string)
+            )
+        );
     }
 }

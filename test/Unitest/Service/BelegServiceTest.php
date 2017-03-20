@@ -78,6 +78,8 @@ class BelegServiceTest extends TestCase
      * @test
      * @dataProvider belegDataProviderWithSignature
      * @param array $data
+     * @param int $signaturePosition
+     * @param string $expectedBase64Signature
      */
     public function getJWSSignature($data, $signaturePosition, $expectedBase64Signature)
     {

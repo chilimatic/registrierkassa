@@ -45,24 +45,25 @@ class CryptoService
      * the max retries have to be above 0 ortherwise it will always fail this is just a safety measure against endless
      * recursions
      *
-     * @param int $maxTry
+     * @param int $length
+     *
      * @return string
+     * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public static function createAESKey($maxTry = 12)
+    public static function createRandomKey($length = 12)
     {
-        if ($maxTry <= 0) {
-            throw new \RuntimeException(__METHOD__ . ' Max retries have been reached');
+        if (!$length) {
+            throw new \InvalidArgumentException(__METHOD__ . ': length is invalid');
         }
 
-        $ivlen = openssl_cipher_iv_length(self::KEY_CYPHER);
-        $isCryptoStrong = false; // Will be set to true by the function if the algorithm used was cryptographically secure
-        $key = openssl_random_pseudo_bytes($ivlen, $isCryptoStrong);
-        if ($key && $isCryptoStrong) {
-            return base64_encode($key);
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[mt_rand(0, $charactersLength - 1)];
         }
-
-        return self::createAESKey(--$maxTry);
+        return $randomString;
     }
 
     /**
