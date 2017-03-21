@@ -14,16 +14,18 @@ class BelegDecorator
     const STORNO_BELEG = 1;
     const NORMAL_BELEG = 2;
     const NULL_BELEG = 3;
+    const START_BELEG = 4;
 
     /**
-     * set für validation
+     * set for validation
      * @var array
      */
     private static $VALID_BELEG_SET = [
         self::TRAININGS_BELEG,
         self::NULL_BELEG,
         self::NORMAL_BELEG,
-        self::STORNO_BELEG
+        self::STORNO_BELEG,
+        self::START_BELEG
     ];
 
     /**
@@ -59,6 +61,14 @@ class BelegDecorator
         $this->beleg = $beleg;
         $this->signature = $signature;
         $this->setTyp($type);
+    }
+
+    /**
+     * @return Beleg
+     */
+    public function getBeleg()
+    {
+        return $this->beleg;
     }
 
     /**
@@ -101,14 +111,6 @@ class BelegDecorator
         }
 
         $this->typ = $typ;
-    }
-
-    /**
-     * @return Beleg
-     */
-    public function getBeleg()
-    {
-        return $this->beleg;
     }
 
     /**

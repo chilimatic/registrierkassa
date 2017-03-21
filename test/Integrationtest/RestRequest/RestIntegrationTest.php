@@ -1,5 +1,4 @@
 <?php
-
 use chilimatic\lib\Di\ClosureFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -8,6 +7,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RestIntegrationTest extends TestCase
 {
+    use ProviderTrait;
+
     /**
      * @var ClosureFactory
      */
@@ -22,24 +23,6 @@ class RestIntegrationTest extends TestCase
     {
         self::$di = ClosureFactory::getInstance(__DIR__ . '/../../../src/services.php');
         self::$service = new \MED\Kassa\Service\RESTService(self::$di);
-    }
-
-
-    public function certificateDataProvider() {
-        return [
-            [
-                '_R1-AT100_CASHBOX-DEMO-1_CASHBOX-DEMO-1-Receipt-ID-82_2016-03-11T04:24:46_0,00_0,00_0,00_0,00_0,00_NLoiSHL3bsM=_eee257579b03302f_cg8hNU5ihto=',
-                'eyJhbGciOiJFUzI1NiJ9.X1IxLUFUMTAwX0NBU0hCT1gtREVNTy0xX0NBU0hCT1gtREVNTy0xLVJlY2VpcHQtSUQtODJfMjAxNi0wMy0xMVQwNDoyNDo0Nl8wLDAwXzAsMDBfMCwwMF8wLDAwXzAsMDBfTkxvaVNITDNic009X2VlZTI1NzU3OWIwMzMwMmZfY2c4aE5VNWlodG89.',
-            ],
-            [
-                '_R1-AT100_CASHBOX-DEMO-2_CASHBOX-DEMO-1-Receipt-ID-100_2017-03-11T04:24:46_0,00_0,00_12,00_0,00_0,00_NLoiSHL3bsM=_eee257579b03302f_cg8hNU5ihto=',
-                'eyJhbGciOiJFUzI1NiJ9.X1IxLUFUMTAwX0NBU0hCT1gtREVNTy0yX0NBU0hCT1gtREVNTy0xLVJlY2VpcHQtSUQtMTAwXzIwMTctMDMtMTFUMDQ6MjQ6NDZfMCwwMF8wLDAwXzEyLDAwXzAsMDBfMCwwMF9OTG9pU0hMM2JzTT1fZWVlMjU3NTc5YjAzMzAyZl9jZzhoTlU1aWh0bz0.'
-            ],
-            [
-                '_R1-AT100_CASHBOX-DEMO-2_CASHBOX-DEMO-1-Receipt-ID-124_2017-03-11T04:24:46_0,00_0,00_12,00_0,00_0,00_NLoiSHL3bsM=_eee257579b03302f_cg8hNU5ihto=',
-                'eyJhbGciOiJFUzI1NiJ9.X1IxLUFUMTAwX0NBU0hCT1gtREVNTy0yX0NBU0hCT1gtREVNTy0xLVJlY2VpcHQtSUQtMTI0XzIwMTctMDMtMTFUMDQ6MjQ6NDZfMCwwMF8wLDAwXzEyLDAwXzAsMDBfMCwwMF9OTG9pU0hMM2JzTT1fZWVlMjU3NTc5YjAzMzAyZl9jZzhoTlU1aWh0bz0.'
-            ]
-        ];
     }
 
     /**

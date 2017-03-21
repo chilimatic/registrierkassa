@@ -1,5 +1,7 @@
 <?php
+use MED\Kassa\Decorator\BelegDecorator;
 use MED\Kassa\Model\Beleg;
+use MED\Kassa\Service\BelegService;
 
 trait ProviderTrait
 {
@@ -158,6 +160,89 @@ trait ProviderTrait
                 '_DEMO-CASH-BOX678_366585AD_2015-12-17T11:23:43_0,00_0,00_0,00_0,00_0,00_5/4fWv5/uhI=_245abcde_lDUkNhEeJKY=',
                 2,
                 '_R1-AT2'
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function buildDataProvider() {
+        return [
+            [
+                [
+                    BelegService::TYP_INDEX => BelegDecorator::START_BELEG,
+                    BelegService::BELEG_INDEX => [
+                        Beleg::KASSEN_ID                => 'MES-1-1',
+                        Beleg::BELEG_NUMMER             => '1',
+                        Beleg::ZERTIFIKAT_SERIENNUMMER  => 'a5251',
+                        Beleg::BELEG_DATUM_UHRZEIT      => '2017-04-01T00:00:00',
+                        Beleg::BETRAG_SATZ_NORMAL       => 0.0,
+                        Beleg::BETRAG_SATZ_ERMAESSIGT_1 => 0.0,
+                        Beleg::BETRAG_SATZ_ERMAESSIGT_2 => 0.0,
+                        Beleg::BETRAG_SATZ_NULL         => 0.0
+                    ],
+                    BelegService::PREVBELEGJWS_INDEX => ''
+                ],
+                1,
+                '_R1-AT1_MES-1-1_1_2017-04-01T00:00:00_0,00_0,00_0,00_0,00_0,00_MA==_a5251_56GElc+aovsoNbE='
+            ],
+            [
+                [
+                    BelegService::TYP_INDEX => BelegDecorator::NORMAL_BELEG,
+                    BelegService::BELEG_INDEX => [
+                        Beleg::KASSEN_ID                => 'MES-1-1',
+                        Beleg::BELEG_NUMMER             => '2',
+                        Beleg::ZERTIFIKAT_SERIENNUMMER  => 'a5251',
+                        Beleg::BELEG_DATUM_UHRZEIT      => '2017-04-01T08:30:00',
+                        Beleg::BETRAG_SATZ_NORMAL       => 12.0,
+                        Beleg::BETRAG_SATZ_ERMAESSIGT_1 => 0.0,
+                        Beleg::BETRAG_SATZ_ERMAESSIGT_2 => 0.0,
+                        Beleg::BETRAG_SATZ_NULL         => 0.0,
+                        Beleg::STAND_UMSATZZAEHLER      => 1200
+                    ],
+                    BelegService::PREVBELEGJWS_INDEX => ''
+                ],
+                1,
+                '_R1-AT1_MES-1-1_2_2017-04-01T08:30:00_12,00_0,00_0,00_0,00_0,00_MTAwMTAxMTAwMDA=_a5251_56GElc+aovsoNbE='
+            ],
+            [
+                [
+                    BelegService::TYP_INDEX => BelegDecorator::STORNO_BELEG,
+                    BelegService::BELEG_INDEX => [
+                        Beleg::KASSEN_ID                => 'MES-1-1',
+                        Beleg::BELEG_NUMMER             => '3',
+                        Beleg::ZERTIFIKAT_SERIENNUMMER  => 'a5251',
+                        Beleg::BELEG_DATUM_UHRZEIT      => '2017-04-01T08:30:00',
+                        Beleg::BETRAG_SATZ_NORMAL       => 0.0,
+                        Beleg::BETRAG_SATZ_ERMAESSIGT_1 => 0.0,
+                        Beleg::BETRAG_SATZ_ERMAESSIGT_2 => 0.0,
+                        Beleg::BETRAG_SATZ_NULL         => -12.0
+                    ],
+                    BelegService::PREVBELEGJWS_INDEX => ''
+                ],
+                1,
+                '_R1-AT1_MES-1-1_3_2017-04-01T08:30:00_0,00_0,00_0,00_-12,00_0,00_U1RP_a5251_56GElc+aovsoNbE='
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function certificateDataProvider() {
+        return [
+            [
+                '_R1-AT100_CASHBOX-DEMO-1_CASHBOX-DEMO-1-Receipt-ID-82_2016-03-11T04:24:46_0,00_0,00_0,00_0,00_0,00_NLoiSHL3bsM=_eee257579b03302f_cg8hNU5ihto=',
+                'eyJhbGciOiJFUzI1NiJ9.X1IxLUFUMTAwX0NBU0hCT1gtREVNTy0xX0NBU0hCT1gtREVNTy0xLVJlY2VpcHQtSUQtODJfMjAxNi0wMy0xMVQwNDoyNDo0Nl8wLDAwXzAsMDBfMCwwMF8wLDAwXzAsMDBfTkxvaVNITDNic009X2VlZTI1NzU3OWIwMzMwMmZfY2c4aE5VNWlodG89.',
+            ],
+            [
+                '_R1-AT100_CASHBOX-DEMO-2_CASHBOX-DEMO-1-Receipt-ID-100_2017-03-11T04:24:46_0,00_0,00_12,00_0,00_0,00_NLoiSHL3bsM=_eee257579b03302f_cg8hNU5ihto=',
+                'eyJhbGciOiJFUzI1NiJ9.X1IxLUFUMTAwX0NBU0hCT1gtREVNTy0yX0NBU0hCT1gtREVNTy0xLVJlY2VpcHQtSUQtMTAwXzIwMTctMDMtMTFUMDQ6MjQ6NDZfMCwwMF8wLDAwXzEyLDAwXzAsMDBfMCwwMF9OTG9pU0hMM2JzTT1fZWVlMjU3NTc5YjAzMzAyZl9jZzhoTlU1aWh0bz0.'
+            ],
+            [
+                '_R1-AT100_CASHBOX-DEMO-2_CASHBOX-DEMO-1-Receipt-ID-124_2017-03-11T04:24:46_0,00_0,00_12,00_0,00_0,00_NLoiSHL3bsM=_eee257579b03302f_cg8hNU5ihto=',
+                'eyJhbGciOiJFUzI1NiJ9.X1IxLUFUMTAwX0NBU0hCT1gtREVNTy0yX0NBU0hCT1gtREVNTy0xLVJlY2VpcHQtSUQtMTI0XzIwMTctMDMtMTFUMDQ6MjQ6NDZfMCwwMF8wLDAwXzEyLDAwXzAsMDBfMCwwMF9OTG9pU0hMM2JzTT1fZWVlMjU3NTc5YjAzMzAyZl9jZzhoTlU1aWh0bz0.'
             ]
         ];
     }

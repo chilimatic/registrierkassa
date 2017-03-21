@@ -91,4 +91,35 @@ class BelegServiceTest extends TestCase
 
         self::assertEquals(BelegService::getJWSSignature($belegDecorator), $expectedBase64Signature);
     }
+
+    /**
+     * @test
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage MED\Kassa\Service\BelegService::buildBelegForRequest: is missing mandatory fields please check:
+     */
+    public function buildBelegForRequestWithInvalidBelegInput() {
+        BelegService::buildBelegForRequest([], 12);
+    }
+
+    /**
+     * @test
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage MED\Kassa\Model\Signature::__construct the pos variable has to be within 0 and 10
+     */
+    public function buildBelegForRequestWithInvalidPos() {
+        BelegService::buildBelegForRequest([BelegService::TYP_INDEX => '', BelegService::BELEG_INDEX => [], BelegService::PREVBELEGJWS_INDEX => ''], 12);
+    }
+
+    /**
+     * @test
+     * @dataProvider buildDataProvider
+     * @param array $belegData
+     * @param int $signaturePos
+     * @param string $expectedJWS
+     */
+    public function buildBelegRequest($belegData, $signaturePos, $expectedJWS) {
+        $belegDecorator = BelegService::buildBelegForRequest($belegData, $signaturePos);
+
+        self::assertEquals($belegDecorator->getJWS(), $expectedJWS);
+    }
 }

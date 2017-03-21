@@ -8,6 +8,12 @@ namespace MED\Kassa\Model;
 class Beleg
 {
     /**
+     * base 64 encoded TRA and STO
+     */
+    const TRAININGS_BELEG_VALUE = 'VFJB';
+    const STORNO_BELEG_VALUE = 'U1RP';
+
+    /**
      * konstanten um tippfehler zu vermeiden von array zu objekt konvertierung
      */
     const KASSEN_ID = 'kassenId';
