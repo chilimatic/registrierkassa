@@ -21,6 +21,10 @@ class BelegService
     const TYP_INDEX = 'typ';
     const PREVBELEGJWS_INDEX = 'prevBelegJWS';
 
+    const JWS_HEAD_INDEX = 'jws-head';
+    const JWS_INDEX = 'jws';
+    const JWS_SIGNATURE = 'jws-signed';
+
     /**
      * @param array $data
      *
@@ -177,9 +181,9 @@ class BelegService
         $parts = explode('.',$encryptedString);
 
         return [
-            'jsw-head'      => $parts[0],
-            'jws'           => $parts[1],
-            'signed'        => $parts[2]
+            self::JWS_HEAD_INDEX    => $parts[0],
+            self::JWS_INDEX         => $parts[1],
+            self::JWS_SIGNATURE     => $parts[2]
         ];
     }
 }

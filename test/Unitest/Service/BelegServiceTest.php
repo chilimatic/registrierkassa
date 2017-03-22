@@ -107,7 +107,14 @@ class BelegServiceTest extends TestCase
      * @expectedExceptionMessage MED\Kassa\Model\Signature::__construct the pos variable has to be within 0 and 10
      */
     public function buildBelegForRequestWithInvalidPos() {
-        BelegService::buildBelegForRequest([BelegService::TYP_INDEX => '', BelegService::BELEG_INDEX => [], BelegService::PREVBELEGJWS_INDEX => ''], 12);
+        BelegService::buildBelegForRequest(
+            [
+                BelegService::TYP_INDEX             => '',
+                BelegService::BELEG_INDEX           => [],
+                BelegService::PREVBELEGJWS_INDEX    => ''
+            ],
+            12
+        );
     }
 
     /**
@@ -120,6 +127,18 @@ class BelegServiceTest extends TestCase
     public function buildBelegRequest($belegData, $signaturePos, $expectedJWS) {
         $belegDecorator = BelegService::buildBelegForRequest($belegData, $signaturePos);
 
-        self::assertEquals($belegDecorator->getJWS(), $expectedJWS);
+        self::assertEquals($expectedJWS, $belegDecorator->getJWS());
+    }
+
+    /**
+     * @test
+     * @dataProvider certificateDataProvider
+     * @param string $jws
+     * @param string $encryptedJws
+     */
+    public function splitBelegData($jws, $encryptedJws) {
+        $parts = BelegService::extractSignedParts($encryptedJws);
+        $decodedHead = base64_decode($parts[BelegService::JWS_HEAD_INDEX]);
+        self::assertEquals('{"alg":"ES256"}', $decodedHead);
     }
 }

@@ -12,17 +12,17 @@ class CryptoServiceTest extends TestCase
     /**
      * @test
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage MED\Kassa\Service\CryptoService::createRandomKey: length is invalid
+     * @expectedExceptionMessage MED\Kassa\Service\CryptoService::createRandomBase64: length is invalid
      */
     public function checkInvalidLengthForRandomKey() {
-        CryptoService::createRandomKey(0);
+        CryptoService::createRandomBase64(0);
     }
 
     /**
      * @test
      */
     public function checkStringLengthRandomKey() {
-        $key = CryptoService::createRandomKey(12);
+        $key = CryptoService::createRandomBase64(12);
         self::assertSame(strlen($key), 12);
     }
 
@@ -44,7 +44,7 @@ class CryptoServiceTest extends TestCase
      */
     public function checkHashgeneration($hashBase, $algorithm, $expectedHash) {
         $hash = CryptoService::generateHash($hashBase, $algorithm);
-        self::assertEquals($hash, $expectedHash);
+        self::assertEquals($expectedHash, $hash);
     }
 
     /**
@@ -56,7 +56,7 @@ class CryptoServiceTest extends TestCase
      */
     public function checkBitExtraction($hash, $amountBytes, $expectedString) {
         $result = CryptoService::extractBytesFromHashAsBase64($hash, $amountBytes);
-        self::assertEquals($result, $expectedString);
+        self::assertEquals($expectedString, $result);
     }
 
     /**
@@ -120,5 +120,47 @@ class CryptoServiceTest extends TestCase
                 CryptoService::encodeBase64($string)
             )
         );
+    }
+
+    /**
+     * @test
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage MED\Kassa\Service\CryptoService::createAESKey Reached max recursion please check
+     */
+    public function generateAesKeyReachMaxRecursions() {
+        CryptoService::createAESKey(0);
+    }
+
+    /**
+     * @test
+     */
+    public function generateAesKey() {
+        $keySet = CryptoService::createAESKey();
+        self::assertNotEmpty($keySet);
+    }
+
+    public function initializationVectorProvider()
+    {
+        return [
+            [
+                'MES-1-1', '1', 'test'
+            ],
+            [
+                'MES-1-2', '1', 'a more complex string I hope 111!!111!!!!'
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider initializationVectorProvider
+     * @test
+     */
+    public function encryptAes($kassenId, $belegNummer, $string) {
+        $key = CryptoService::createAESKey();
+
+        $iv = CryptoService::getIV($kassenId, $belegNummer);
+        $encryptedString = CryptoService::encryptAES($string, base64_decode($key), base64_decode($iv));
+        $decryptedString = CryptoService::decryptAES($encryptedString, base64_decode($key), base64_decode($iv));
+        self::assertEquals($decryptedString, $string);
     }
 }

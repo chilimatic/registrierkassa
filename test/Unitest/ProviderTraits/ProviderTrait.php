@@ -49,10 +49,10 @@ trait ProviderTrait
      */
     public function hashProvider() {
         return [
-            [self::$HASH_1, 8, 'YYRLgqDHl25a'],
-            [self::$HASH_2, 12, '6rwPPc94gJcXed58t0HEisnU'],
-            [self::$HASH_3, 24, '//2I20JbCRsktLmXDhfXwyg3itox65tD/57D3KMW'],
-            [self::$HASH_4, 8, 'IOO9zevP1qgl4zK0ayk=']
+            [self::$HASH_1, 8, 'YYRLgqDHl24='],
+            [self::$HASH_2, 12, '6rwPPc94gJcXed58'],
+            [self::$HASH_3, 24, '//2I20JbCRsktLmXDhfXwyg3itox65tD'],
+            [self::$HASH_4, 8, 'IOO9zevP1qg=']
         ];
     }
 
@@ -185,7 +185,7 @@ trait ProviderTrait
                     BelegService::PREVBELEGJWS_INDEX => ''
                 ],
                 1,
-                '_R1-AT1_MES-1-1_1_2017-04-01T00:00:00_0,00_0,00_0,00_0,00_0,00_MA==_a5251_56GElc+aovsoNbE='
+                '_R1-AT1_MES-1-1_1_2017-04-01T00:00:00_0,00_0,00_0,00_0,00_0,00_MA==_a5251_56GElc+aovs='
             ],
             [
                 [
@@ -204,7 +204,7 @@ trait ProviderTrait
                     BelegService::PREVBELEGJWS_INDEX => ''
                 ],
                 1,
-                '_R1-AT1_MES-1-1_2_2017-04-01T08:30:00_12,00_0,00_0,00_0,00_0,00_MTAwMTAxMTAwMDA=_a5251_56GElc+aovsoNbE='
+                '_R1-AT1_MES-1-1_2_2017-04-01T08:30:00_12,00_0,00_0,00_0,00_0,00_MTAwMTAxMTAwMDA=_a5251_56GElc+aovs='
             ],
             [
                 [
@@ -222,7 +222,7 @@ trait ProviderTrait
                     BelegService::PREVBELEGJWS_INDEX => ''
                 ],
                 1,
-                '_R1-AT1_MES-1-1_3_2017-04-01T08:30:00_0,00_0,00_0,00_-12,00_0,00_U1RP_a5251_56GElc+aovsoNbE='
+                '_R1-AT1_MES-1-1_3_2017-04-01T08:30:00_0,00_0,00_0,00_-12,00_0,00_U1RP_a5251_56GElc+aovs='
             ]
         ];
     }

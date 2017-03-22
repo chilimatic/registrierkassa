@@ -50,6 +50,11 @@ class BelegDecorator
     private $prepared = false;
 
     /**
+     * @var string
+     */
+    private $signedJWS;
+
+    /**
      * BelegTyp constructor.
      * @param Beleg $beleg
      * @param Signature $signature
@@ -135,5 +140,23 @@ class BelegDecorator
      */
     final public function getSignature() {
         return $this->signature;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSignedJWS()
+    {
+        return $this->signedJWS;
+    }
+
+    /**
+     * @param string $signedJWS
+     * @return self
+     */
+    public function setSignedJWS($signedJWS)
+    {
+        $this->signedJWS = $signedJWS;
+        return $this;
     }
 }

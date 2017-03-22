@@ -38,7 +38,7 @@ class CryptoService
             throw new \InvalidArgumentException(__METHOD__ . ": hash: $hash is not a string or amount: $range is not an int");
         }
 
-        return base64_encode(mb_substr(hex2bin($hash), 0, $range, self::STRING_ENCODING));
+        return self::encodeBase64(substr(hex2bin($hash), 0, $range));
     }
 
     /**
@@ -51,19 +51,87 @@ class CryptoService
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public static function createRandomKey($length = 12)
+    public static function createRandomBase64($length = 12)
     {
         if (!$length) {
             throw new \InvalidArgumentException(__METHOD__ . ': length is invalid');
         }
 
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/';
         $charactersLength = strlen($characters);
         $randomString = '';
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[mt_rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    /**
+     * returns an array containing the key and the init vector
+     *
+     * @param int $maxRecursion
+     * @return string
+     *
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
+     */
+    public static function createAESKey($maxRecursion = 4)
+    {
+        if ($maxRecursion === 0) {
+            throw new \RuntimeException(__METHOD__ . ' Reached max recursion please check');
+        }
+
+        $key = self::createRandomBase64(32);
+
+        return self::encodeBase64(
+                    self::extractBytesFromHashAsBase64(
+                        bin2hex(
+                            self::decodeBase64(
+                                $key
+                            )
+                        ), 32
+                    )
+                );
+    }
+
+    /**
+     * @param string $part1
+     * @param string $part2
+     *
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    public static function getIV($part1, $part2)
+    {
+        return self::extractBytesFromHashAsBase64(
+            self::generateHash($part1.$part2, 'sha256'),
+            16
+        );
+    }
+
+
+    /**
+     * @param string $data
+     * @param string $key
+     * @param int $iv
+     *
+     * @return string hex representation
+     */
+    public static function encryptAES($data, $key, $iv)
+    {
+        return openssl_encrypt($data, self::KEY_CYPHER, $key, 1, $iv);
+    }
+
+    /**
+     * @param string $data in hex
+     * @param string $key
+     * @param int $iv
+     *
+     * @return string
+     */
+    public static function decryptAES($data, $key, $iv)
+    {
+        return openssl_decrypt($data, self::KEY_CYPHER, $key, 1, $iv);
     }
 
     /**

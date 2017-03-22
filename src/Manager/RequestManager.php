@@ -33,7 +33,12 @@ class RequestManager
     private $belegDecorator;
 
 
+    /**
+     * @return string
+     * @throws \InvalidArgumentException
+     */
     public function getSignedJWS() {
+
         $this->requestConfig->setPayload($this->getBelegDecorator()->getJWS());
         $promise = $this->restService->sendSigningRequest($this->restConfig, $this->requestConfig);
 
@@ -41,11 +46,14 @@ class RequestManager
          * @var \GuzzleHttp\Psr7\Response $response
          */
         $response = $promise->wait();
-        $signedPaylout = json_decode($response->getBody()->getContents(), true);
+        $signedPayload = json_decode($response->getBody()->getContents(), true);
 
-        return $signedPaylout['result'];
+        if (isset($signedPayload['result'])) {
+            $this->belegDecorator->setSignedJWS($signedPayload['result']);
+        }
+
+        return $signedPayload['result'];
     }
-
 
     /**
      * @return RESTService
