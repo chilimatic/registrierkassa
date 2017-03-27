@@ -81,16 +81,14 @@ class CryptoService
             throw new \RuntimeException(__METHOD__ . ' Reached max recursion please check');
         }
 
-        $key = self::createRandomBase64(32);
+        $key = self::createRandomBase64(44);
 
-        return self::encodeBase64(
-                    self::extractBytesFromHashAsBase64(
-                        bin2hex(
-                            self::decodeBase64(
-                                $key
-                            )
-                        ), 32
-                    )
+        return self::extractBytesFromHashAsBase64(
+                    bin2hex(
+                        self::decodeBase64(
+                            $key
+                        )
+                    ), 32
                 );
     }
 
