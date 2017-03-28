@@ -139,17 +139,6 @@ class CryptoServiceTest extends TestCase
         self::assertNotEmpty($keySet);
     }
 
-    public function initializationVectorProvider()
-    {
-        return [
-            [
-                'MES-1-1', '1', 'test'
-            ],
-            [
-                'MES-1-2', '1', 'a more complex string I hope 111!!111!!!!'
-            ]
-        ];
-    }
 
     /**
      * @dataProvider initializationVectorProvider

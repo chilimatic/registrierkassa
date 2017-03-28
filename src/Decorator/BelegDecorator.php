@@ -10,11 +10,12 @@ use MED\Kassa\Model\Signature;
  */
 class BelegDecorator
 {
-    const TRAININGS_BELEG = 0;
-    const STORNO_BELEG = 1;
+    const START_BELEG = 1;
     const NORMAL_BELEG = 2;
     const NULL_BELEG = 3;
-    const START_BELEG = 4;
+    const STORNO_BELEG = 4;
+    const TRAININGS_BELEG = 5;
+
 
     /**
      * set for validation

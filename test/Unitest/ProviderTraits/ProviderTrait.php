@@ -246,4 +246,30 @@ trait ProviderTrait
             ]
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function keyProvider() {
+        return [
+            [
+                'qx6p', 'cWhay3H4asTvRzXzXGZQ3KyBEu9BZaIxl8J+L4Bhr5A='
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function initializationVectorProvider()
+    {
+        return [
+            [
+                'MES-1-1', '1', 'test'
+            ],
+            [
+                'MES-1-2', '1', 'a more complex string I hope 111!!111!!!!'
+            ]
+        ];
+    }
 }
