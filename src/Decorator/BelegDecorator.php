@@ -94,8 +94,12 @@ class BelegDecorator
      * @throws \InvalidArgumentException
      */
     final public function getJWS() {
-        $prefix = '_' . $this->signature->getSignaturePrefix();
-        return  $prefix . $this->getBeleg()->getJWS();
+        $set = '_' . $this->signature->getSignaturePrefix();
+        $set .= $this->getBeleg()->getJWS();
+        if ($this->getSignedJWS()) {
+            $set .= '_'. $this->getSignedJWS();
+        }
+        return $set;
     }
 
     /**
