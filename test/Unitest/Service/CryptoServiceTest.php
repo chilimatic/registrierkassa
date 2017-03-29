@@ -152,4 +152,26 @@ class CryptoServiceTest extends TestCase
         $decryptedString = CryptoService::decryptAES($encryptedString, base64_decode($key), base64_decode($iv));
         self::assertEquals($decryptedString, $string);
     }
+
+    /**
+     * @dataProvider signatureExtractionProvider
+     * @param $signedJWS
+     * @param $extractHash
+     */
+    public function testCorrectSignatureExtraction($signedJWS, $extractHash)
+    {
+        $getParts = \MED\Kassa\Service\BelegService::extractSignedParts($signedJWS);
+        $part =
+            CryptoService::generateHash(
+                $signedJWS, 'sha256'
+            );
+
+        var_dump($part);
+
+        $result = CryptoService::extractBytesFromHashAsBase64(
+                $part,
+                8
+        );
+        self::assertEquals($result, $extractHash);
+    }
 }

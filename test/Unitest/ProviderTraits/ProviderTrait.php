@@ -261,6 +261,18 @@ trait ProviderTrait
     /**
      * @return array
      */
+    public function signatureExtractionProvider() {
+        return [
+            [
+                'eyJhbGciOiJFUzI1NiJ9.X1IxLUFUMF9ERU1PLUNBU0gtQk9YNTI0XzM2NjU4N18yMDE1LTEyLTE3VDExOjIzOjQ0XzM0LDc3XzU5LDY0XzM4LDEzXzAsMDBfMCwwMF84TUc4QzFLcjdIQT1fMjBmMmVkMTcyZGFhMDllNV94VGZadmtCU1RyND0.GeWps9kci-fUqKLymS1pHlIbv0L8Oek-v6TDmZj9Ffucb8yvSijqZ8LcBalV9lADMXQ8U3itViKkd_i1Ba22BA'
+                , '5HjRCx+XIz4='
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function initializationVectorProvider()
     {
         return [

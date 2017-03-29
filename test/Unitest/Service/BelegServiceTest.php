@@ -1,5 +1,6 @@
 <?php
 use MED\Kassa\Decorator\BelegDecorator;
+use MED\Kassa\Model\Beleg;
 use MED\Kassa\Model\Signature;
 use MED\Kassa\Service\BelegService;
 use PHPUnit\Framework\TestCase;
@@ -110,8 +111,11 @@ class BelegServiceTest extends TestCase
         BelegService::buildBelegForRequest(
             [
                 BelegService::TYP_INDEX             => '',
-                BelegService::BELEG_INDEX           => [],
-                BelegService::PREVBELEGJWS_INDEX    => ''
+                BelegService::BELEG_INDEX           => [
+                    Beleg::STAND_UMSATZZAEHLER => ''
+                ],
+                BelegService::PREVBELEGJWS_INDEX    => '',
+
             ],
             12
         );
