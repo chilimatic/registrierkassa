@@ -186,4 +186,48 @@ class BelegService
             self::JWS_SIGNATURE     => $parts[2]
         ];
     }
+
+    /**
+     * @param string $jwsToken
+     * @throws \InvalidArgumentException
+     * @return BelegDecorator
+     */
+    public static function jwsToDecorator($jwsToken) {
+        if (!$jwsToken || !is_string($jwsToken)) {
+            throw new \InvalidArgumentException(__METHOD__ . ': $jwsToken is empty or not a string ' . print_r($jwsToken, true));
+        }
+        $parts = explode('_', trim($jwsToken, '_'));
+
+        // a not signed jws consists of 12 parts a signed one of 13
+        // '_R1-AT1_MES-1-1_000036_2017-03-30T09:30:15_15,00_0,00_0,00_0,00_0,00_UQN7IVSWiIwQj/BV_0_/LkmbJD3rrU=_T8zfv683-oVfLFtJHyiEbL4usG5ZQJP1fyeQJ9IWAe1hxwmJ0vnKLBFt6vEERKVqAvNVSHNHHs8NMqAcBNWYqg';
+        if (count($parts) < 12 || count($parts) > 13) {
+            throw new \InvalidArgumentException(__METHOD__ . ': the jws token is invalid: a not signed jws consists of 12 parts a signed one of 13 seperated with _ :' . print_r($jwsToken, true));
+        }
+
+        $belegData = [
+            Beleg::KASSEN_ID => $parts[1],
+            Beleg::BELEG_NUMMER => $parts[2],
+            Beleg::BELEG_DATUM_UHRZEIT => $parts[3],
+            Beleg::BETRAG_SATZ_NORMAL => str_replace(',', '.', $parts[4]),
+            Beleg::BETRAG_SATZ_NULL => str_replace(',', '.', $parts[5]),
+            Beleg::BETRAG_SATZ_ERMAESSIGT_1 => str_replace(',', '.', $parts[6]),
+            Beleg::BETRAG_SATZ_ERMAESSIGT_2 => str_replace(',', '.', $parts[7]),
+            Beleg::BETRAG_SATZ_BESONDERS => str_replace(',', '.', $parts[8]),
+            Beleg::STAND_UMSATZZAEHLER => $parts[9],
+            Beleg::ZERTIFIKAT_SERIENNUMMER => $parts[10],
+            Beleg::SIG_VORIGER_BELEG => $parts[11]
+        ];
+
+        $beleg = self::createNewBeleg($belegData);
+        $signaturePars = explode('-', $parts[0]);
+        $pos = substr($signaturePars[1], -1);
+        $signature = new Signature((int) $pos);
+
+        $belegDecorator = self::decorateBeleg($beleg, $signature, BelegDecorator::PARSED_JWS);
+        if (isset($parts[12])) {
+            $belegDecorator->setSignedJWS($parts[12]);
+        }
+
+        return $belegDecorator;
+    }
 }

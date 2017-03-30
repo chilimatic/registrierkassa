@@ -145,4 +145,15 @@ class BelegServiceTest extends TestCase
         $decodedHead = base64_decode($parts[BelegService::JWS_HEAD_INDEX]);
         self::assertEquals('{"alg":"ES256"}', $decodedHead);
     }
+
+    /**
+     * @test
+     */
+    public function getDecoratorFromStringRepresentation() {
+        $jws =  '_R1-AT1_MES-1-1_000036_2017-03-30T09:30:15_15,00_0,00_0,00_0,00_0,00_UQN7IVSWiIwQj/BV_0_/LkmbJD3rrU=_T8zfv683-oVfLFtJHyiEbL4usG5ZQJP1fyeQJ9IWAe1hxwmJ0vnKLBFt6vEERKVqAvNVSHNHHs8NMqAcBNWYqg';
+
+        $decorator = BelegService::jwsToDecorator($jws);
+
+        self::assertEquals($decorator->getJWS(), $jws);
+    }
 }

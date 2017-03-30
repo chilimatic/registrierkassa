@@ -15,6 +15,7 @@ class BelegDecorator
     const NULL_BELEG = 3;
     const STORNO_BELEG = 4;
     const TRAININGS_BELEG = 5;
+    const PARSED_JWS = 6;
 
 
     /**
@@ -26,7 +27,8 @@ class BelegDecorator
         self::NULL_BELEG,
         self::NORMAL_BELEG,
         self::STORNO_BELEG,
-        self::START_BELEG
+        self::START_BELEG,
+        self::PARSED_JWS
     ];
 
     /**
