@@ -184,6 +184,24 @@ class CryptoServiceTest extends TestCase
     /**
      * @test
      */
+    public function correctInitialChain() {
+        $value = 'DEMO-CASH-BOX524';
+
+        $result = CryptoService::extractBytesFromHashAsBase64(
+            CryptoService::generateHash(
+                $value,
+                'sha256'
+            ),
+            8
+        );
+
+        self::assertEquals('lDUkNhEeJKY=', $result);
+    }
+
+
+    /**
+     * @test
+     */
     public function correctInitialBelegHash() {
         $hash = CryptoService::generateHash('A12347', 'sha256');
         $extractedHash = CryptoService::extractBytesFromHashAsBase64($hash, 8);;
