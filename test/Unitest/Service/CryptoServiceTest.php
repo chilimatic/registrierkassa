@@ -154,24 +154,40 @@ class CryptoServiceTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    public function IVvsJavaIV() {
+        $iv = CryptoService::getIV('MES-1-1', '000001');
+        self::assertEquals('eAlTcVwvYZ+p8gLd16QBvw==', $iv);
+    }
+
+    /**
+     * @test
      * @dataProvider signatureExtractionProvider
      * @param $signedJWS
      * @param $extractHash
      */
-    public function testCorrectSignatureExtraction($signedJWS, $extractHash)
+    public function correctSignatureExtraction($signedJWS, $extractHash)
     {
-        $getParts = \MED\Kassa\Service\BelegService::extractSignedParts($signedJWS);
         $part =
             CryptoService::generateHash(
                 $signedJWS, 'sha256'
             );
-
-        var_dump($part);
 
         $result = CryptoService::extractBytesFromHashAsBase64(
                 $part,
                 8
         );
         self::assertEquals($result, $extractHash);
+    }
+
+    /**
+     * @test
+     */
+    public function correctInitialBelegHash() {
+        $hash = CryptoService::generateHash('A12347', 'sha256');
+        $extractedHash = CryptoService::extractBytesFromHashAsBase64($hash, 8);;
+
+        self::assertEquals('OeSKQjO4zKI=', $extractedHash);
     }
 }
