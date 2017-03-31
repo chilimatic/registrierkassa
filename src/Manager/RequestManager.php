@@ -4,6 +4,7 @@ namespace MED\Kassa\Manager;
 use MED\Kassa\Decorator\BelegDecorator;
 use MED\Kassa\Model\RequestConfig;
 use MED\Kassa\Model\RestConfig;
+use MED\Kassa\Service\BelegService;
 use MED\Kassa\Service\RESTService;
 
 /**
@@ -48,8 +49,11 @@ class RequestManager
         $response = $promise->wait();
         $signedPayload = json_decode($response->getBody()->getContents(), true);
 
+
+
         if (isset($signedPayload['result'])) {
-            $this->belegDecorator->setSignedJWS($signedPayload['result']);
+            $parts = BelegService::extractSignedParts($signedPayload['result']);
+            $this->belegDecorator->setSignedJWS($parts[BelegService::JWS_SIGNATURE]);
         }
 
         return $signedPayload['result'];

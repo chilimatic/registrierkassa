@@ -63,8 +63,10 @@ class SignatureIntegrationTest extends TestCase
         self::$belegSet[0]['signedToken'] = $requestManager->getSignedJWS();
 
         $parts = BelegService::extractSignedParts(self::$belegSet[0]['signedToken']);
+        $expectedString = CryptoService::decodeBase64($parts[BelegService::JWS_INDEX]);
+        $expectedString .= '_'. $parts[BelegService::JWS_SIGNATURE];
 
-        self::assertEquals(CryptoService::decodeBase64($parts[BelegService::JWS_INDEX]), $belegDecorator->getJWS());
+        self::assertEquals($expectedString, $belegDecorator->getJWS());
     }
 
     /**
@@ -105,10 +107,11 @@ class SignatureIntegrationTest extends TestCase
 
         $parts = BelegService::extractSignedParts(self::$belegSet[1]['signedToken']);
 
+        $expectedString = CryptoService::decodeBase64($parts[BelegService::JWS_INDEX]);
+        $expectedString .= '_'. $parts[BelegService::JWS_SIGNATURE];
+
         self::assertEquals(
-            CryptoService::decodeBase64(
-                $parts[BelegService::JWS_INDEX]
-            ),
+            $expectedString,
             $belegDecorator->getJWS()
         );
     }
