@@ -36,6 +36,8 @@ class RequestManager
 
     /**
      * @return string
+     * @throws \RuntimeException
+     * @throws \LogicException
      * @throws \InvalidArgumentException
      */
     public function getSignedJWS() {
@@ -49,13 +51,12 @@ class RequestManager
         $response = $promise->wait();
         $signedPayload = json_decode($response->getBody()->getContents(), true);
 
-
-
-        if (isset($signedPayload['result'])) {
-            $parts = BelegService::extractSignedParts($signedPayload['result']);
-            $this->belegDecorator->setSignedJWS($parts[BelegService::JWS_SIGNATURE]);
+        if (!isset($signedPayload['result'])) {
+            throw new \RuntimeException('Got Invalid response for:' . $this->belegDecorator->getJWS());
         }
 
+        $parts = BelegService::extractSignedParts($signedPayload['result']);
+        $this->belegDecorator->setSignedJWS($parts[BelegService::JWS_SIGNATURE]);
         return $signedPayload['result'];
     }
 

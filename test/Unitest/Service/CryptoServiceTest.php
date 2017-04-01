@@ -163,6 +163,46 @@ class CryptoServiceTest extends TestCase
 
     /**
      * @test
+     */
+    public function getAesEncryptedValue() {
+        $key = "88gl/+qW7Sz/UUBq6RgTDnKX5iCE5ZSkbEu2A7yWTzM=";
+        $kassaID = 'MES-1-1';
+        $belegID = '001054';
+        $lenght = 8;
+
+        $base = $kassaID.$belegID;
+        $iv = CryptoService::getIV($kassaID, $belegID);
+        $hash = CryptoService::encryptAES(
+            base64_decode('AAAAAAAAAAA='),
+            base64_decode($key),
+            base64_decode($iv)
+        );
+
+        self::assertEquals("MES-1-1001054", $base);
+        self::assertEquals('8LI/5bDm1c9igraTbumBvw==', $iv);
+        self::assertEquals("AQcw/Xa9/JM=", base64_encode($hash));
+    }
+
+    /**
+     * @test
+     */
+    public function createPaddedNumber0() {
+        $res = pack('N', 0) . pack('N', 0);
+        self::assertEquals('AAAAAAAAAAA=', $res);
+    }
+
+    /**
+     * @test
+     */
+    public function createPaddedNumber100() {
+        $wert100 = 'AAAAAAAAAGQ=';
+
+        $res = pack('N', 0) . pack('N', 100);
+        self::assertEquals($wert100, base64_encode($res));
+    }
+
+    /**
+     * @test
      * @dataProvider signatureExtractionProvider
      * @param $signedJWS
      * @param $extractHash
